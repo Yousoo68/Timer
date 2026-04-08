@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>자동 스톱워치</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #0f172a, #020617);
+      color: #0ff;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 30px rgba(0,255,255,0.2), inset 0 0 20px rgba(0,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #7df9ff;
+      letter-spacing: 2px;
+    }
+
+    #time {
+      font-size: 48px;
+      letter-spacing: 3px;
+      text-shadow:
+        0 0 10px #0ff,
+        0 0 20px #0ff,
+        0 0 40px #0ff;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow:
+          0 0 5px #0ff,
+          0 0 10px #0ff,
+          0 0 20px #0ff;
+      }
+      to {
+        text-shadow:
+          0 0 15px #0ff,
+          0 0 30px #0ff,
+          0 0 60px #0ff;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🚭 No Smoking</h1>
+  <div id="time">00일 00:00:00</div>
+</div>
+
+<script>
+  const START_TIME_KEY = "stopwatch_start_time";
+
+  function getNow() {
+    return new Date().getTime();
+  }
+
+  function formatTime(ms) {
+    let totalSeconds = Math.floor(ms / 1000);
+
+    const days = Math.floor(totalSeconds / 86400);
+    totalSeconds %= 86400;
+
+    const hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${String(days).padStart(2,'0')}일 ${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+  }
+
+  function update() {
+    const startTime = localStorage.getItem(START_TIME_KEY);
+    if (!startTime) return;
+
+    const elapsed = getNow() - parseInt(startTime);
+    document.getElementById("time").innerText = formatTime(elapsed);
+  }
+
+  function initFirstVisit() {
+    if (!localStorage.getItem(START_TIME_KEY)) {
+      localStorage.setItem(START_TIME_KEY, getNow());
+    }
+  }
+
+  initFirstVisit();
+  update();
+  setInterval(update, 1000);
+</script>
+
+</body>
+</html>
