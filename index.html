@@ -57,7 +57,6 @@
           0 0 60px #0ff;
       }
     }
-
   </style>
 </head>
 <body>
@@ -68,10 +67,19 @@
 </div>
 
 <script>
-  const START_TIME_KEY = "stopwatch_start_time";
+  // ✅ 한국 기준 시작 시간
+  const START_TIME = new Date("2026-04-08T16:36:00+09:00").getTime();
 
-  function getNow() {
-    return new Date().getTime();
+  // ✅ 한국 시간 기준 현재 시간 가져오기
+  function getKoreanNow() {
+    const now = new Date();
+
+    // 한국 시간으로 변환
+    const seoul = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Seoul" })
+    );
+
+    return seoul.getTime();
   }
 
   function formatTime(ms) {
@@ -90,20 +98,11 @@
   }
 
   function update() {
-    const startTime = localStorage.getItem(START_TIME_KEY);
-    if (!startTime) return;
-
-    const elapsed = getNow() - parseInt(startTime);
+    const now = getKoreanNow(); // 🔥 핵심
+    const elapsed = now - START_TIME;
     document.getElementById("time").innerText = formatTime(elapsed);
   }
 
-  function initFirstVisit() {
-    if (!localStorage.getItem(START_TIME_KEY)) {
-      localStorage.setItem(START_TIME_KEY, getNow());
-    }
-  }
-
-  initFirstVisit();
   update();
   setInterval(update, 1000);
 </script>
