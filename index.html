@@ -67,44 +67,12 @@
 </div>
 
 <script>
-  // ✅ 한국 기준 시작 시간
-  const START_TIME = new Date("2026-04-09T18:30:00+09:00").getTime();
-
-  // ✅ 한국 시간 기준 현재 시간 가져오기
-  function getKoreanNow() {
-    const now = new Date();
-
-    // 한국 시간으로 변환
-    const seoul = new Date(
-      now.toLocaleString("en-US", { timeZone: "Asia/Seoul" })
-    );
-
-    return seoul.getTime();
+  function initFixedTime() {
+    const fixedTime = "05일 14:00:00";
+    document.getElementById("time").innerText = fixedTime;
   }
 
-  function formatTime(ms) {
-    let totalSeconds = Math.floor(ms / 1000);
-
-    const days = Math.floor(totalSeconds / 86400);
-    totalSeconds %= 86400;
-
-    const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${String(days).padStart(2,'0')}일 ${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-  }
-
-  function update() {
-    const now = getKoreanNow(); // 🔥 핵심
-    const elapsed = now - START_TIME;
-    document.getElementById("time").innerText = formatTime(elapsed);
-  }
-
-  update();
-  setInterval(update, 1000);
+  initFixedTime();
 </script>
 
 </body>
